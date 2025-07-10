@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guess the Number – Benaldo Dev</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html">Home</a>
+    <a href="skills.html">Skills</a>
+    <a href="contact.html">Contact</a>
+    <a href="guess-number.html">Game</a>
+  </nav>
+
+  <!-- PAGE TITLE -->
+  <h2 class="page-title">🎲 Guess the Number Game</h2>
+
+  <!-- GAME CARD -->
+  <div class="form-card" id="game-card">
+    <p>Guess a number between <strong>1 and 10</strong></p>
+
+    <input type="number" id="guess" min="1" max="10" placeholder="Enter your guess">
+    <br><br>
+
+    <button onclick="checkGuess()">Submit Guess</button>
+    <button onclick="resetGame()">Reset Game</button>
+    <button id="show-btn" onclick="showAnswer()" style="display:none;">Show Secret Number</button>
+
+    <p id="message"></p>
+    <p id="guesses"></p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Benaldo Dev. All rights reserved.</p>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    let secret = Math.floor(Math.random() * 10) + 1;
+    let tries = 0;
+    let history = [];
+
+    function checkGuess() {
+      const input = document.getElementById("guess");
+      const message = document.getElementById("message");
+      const guesses = document.getElementById("guesses");
+      const showBtn = document.getElementById("show-btn");
+      const guess = Number(input.value);
+
+      if (!guess || guess < 1 || guess > 10) {
+        message.style.color = "red";
+        message.textContent = "⛔ Enter a number between 1 and 10.";
+        return;
+      }
+
+      tries++;
+      history.push(guess);
+      guesses.textContent = "Your guesses: " + history.join(", ");
+
+      if (guess === secret) {
+        message.style.color = "green";
+        message.textContent = `🎉 Correct! You guessed it in ${tries} tries.`;
+        input.disabled = true;
+      } else if (tries >= 3) {
+        message.style.color = "red";
+        message.textContent = `❌ Game over. You used all 3 tries.`;
+        input.disabled = true;
+        showBtn.style.display = "inline-block";
+      } else {
+        message.style.color = "orange";
+        message.textContent = guess < secret ? "📉 Too low!" : "📈 Too high!";
+      }
+    }
+
+    function resetGame() {
+      secret = Math.floor(Math.random() * 10) + 1;
+      tries = 0;
+      history = [];
+      document.getElementById("message").textContent = "";
+      document.getElementById("guesses").textContent = "";
+      document.getElementById("guess").value = "";
+      document.getElementById("guess").disabled = false;
+      document.getElementById("show-btn").style.display = "none";
+    }
+
+    function showAnswer() {
+      document.getElementById("message").textContent = `🔍 The secret number was ${secret}.`;
+    }
+  </script>
+
+</body>
+</html>
